@@ -2,10 +2,19 @@ package com.endava.internship.dataCenter.model;
 
 import lombok.Builder;
 import lombok.Data;
+import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @Builder
+@Entity
 public class Employees {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String firstName;
     private String lastName;
@@ -15,7 +24,7 @@ public class Employees {
     private double salary;
     private double commissionPct;
 
-    static Employees from(EmployeesDto employeesDto) {
+    public static Employees from(EmployeesDto employeesDto) {
         return builder()
                 .firstName(employeesDto.getFirstName())
                 .lastName(employeesDto.getLastName())
