@@ -1,6 +1,6 @@
 package com.endava.internship.dataCenter.service;
 
-import com.endava.internship.dataCenter.model.Employee;
+import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.model.EmployeeDto;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +14,17 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
-    public Employee addEmployee(EmployeeDto employeeDto){
-        return employeeRepository.save(Employee.from(employeeDto));
+    public Employees addEmployee(EmployeeDto employeeDto){
+        return employeeRepository.save(Employees.from(employeeDto));
     }
 
-    public Employee getEmployee(Integer id){
-        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("employee not found"));
+    public Employees getEmployee(Integer id){
+        //Long l = employeeRepository.count();
+        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException());
+
     }
 
-    public List<Employee> getAllEmployee(){
+    public List<Employees> getAllEmployees(){
         return employeeRepository.findAll();
     }
 }

@@ -1,8 +1,8 @@
 package com.endava.internship.dataCenter.repository;
 
-import com.endava.internship.dataCenter.model.Employee;
+import com.endava.internship.dataCenter.model.Employees;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface EmployeeRepository extends JpaRepository<Employees, Integer> {
 
 }

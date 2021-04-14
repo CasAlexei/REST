@@ -12,17 +12,17 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Department {
+public class Departments {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private Integer departmentId;
     private String departmentName;
 
 
     @OneToOne(mappedBy = "empDetail")
-    private Employee employee;
+    private Employees employees;
 
-    public static Department from(DepartmentDto departmentDto) {
+    public static Departments from(DepartmentDto departmentDto) {
         return builder()
                 .departmentName(departmentDto.getDepartmentName())
                 .build();

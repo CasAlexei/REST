@@ -12,11 +12,12 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Employee {
+//@Table(name="employees")
+public class Employees {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private Integer employeeId;
     private String firstName;
     private String lastName;
     private String email;
@@ -27,10 +28,10 @@ public class Employee {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="department_id")
-    private Department empDetail;
+    private Departments empDetail;
 
 
-    public static Employee from(EmployeeDto employeeDto) {
+    public static Employees from(EmployeeDto employeeDto) {
         return builder()
                 .firstName(employeeDto.getFirstName())
                 .lastName(employeeDto.getLastName())
