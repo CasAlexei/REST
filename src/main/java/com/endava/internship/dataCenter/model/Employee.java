@@ -1,5 +1,6 @@
 package com.endava.internship.dataCenter.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
     @Id
