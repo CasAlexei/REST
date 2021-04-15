@@ -1,5 +1,6 @@
 package com.endava.internship.dataCenter.model;
 
+import javafx.scene.input.DataFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ public class EmployeeDto {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private String hireDate;
+    private LocalDate hireDate;
     private double salary;
     private double commissionPct;
 }

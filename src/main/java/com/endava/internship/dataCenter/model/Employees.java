@@ -1,18 +1,20 @@
 package com.endava.internship.dataCenter.model;
 
+import javafx.scene.input.DataFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(name="employees")
+@Table(name="employees")
 public class Employees {
 
     @Id
@@ -22,13 +24,17 @@ public class Employees {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private String hireDate;
+    private LocalDate hireDate;
     private double salary;
     private double commissionPct;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="department_id")
-    private Departments empDetail;
+    private Departments departmentDetail;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "department_id", nullable = false)
+//    private Departments departments;
 
 
     public static Employees from(EmployeeDto employeeDto) {

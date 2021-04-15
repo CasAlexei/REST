@@ -2,7 +2,7 @@ package com.endava.internship.dataCenter.controller;
 
 import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.model.EmployeeDto;
-import com.endava.internship.dataCenter.service.EmployeeService;
+import com.endava.internship.dataCenter.service.EmployeesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,24 +12,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeesController {
 
-    private final EmployeeService employeeService;
+    private final EmployeesService employeesService;
 
     // create new employee
     @PostMapping("/employees")
     public Employees addEmployee(@RequestBody EmployeeDto employeesDto){
-        return employeeService.addEmployee(employeesDto);
+        return employeesService.addEmployee(employeesDto);
     }
 
     // get employee by id
     @GetMapping("/employees/{id}")
     public Employees getEmployee(@PathVariable Integer id){
-        return employeeService.getEmployee(id);
-        //return id*100;
+        return employeesService.getEmployee(id);
     }
 
-    //  list all employees
+    //  list of all employees
     @GetMapping("/employees")
     public List<Employees> getAllEmployee(){
-        return employeeService.getAllEmployees();
+        return employeesService.getAllEmployees();
     }
 }

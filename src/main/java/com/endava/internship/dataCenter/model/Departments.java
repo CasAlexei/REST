@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,9 +19,10 @@ public class Departments {
     private Integer departmentId;
     private String departmentName;
 
-
-    @OneToOne(mappedBy = "empDetail")
-    private Employees employees;
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "departmentDetail")
+    private List<Employees> employeesList;
 
     public static Departments from(DepartmentDto departmentDto) {
         return builder()
