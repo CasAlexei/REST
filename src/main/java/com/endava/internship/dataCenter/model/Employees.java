@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -24,7 +25,7 @@ public class Employees {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private LocalDate hireDate;
+    private LocalDateTime hireDate;
     private Double salary;
     //@Column(columnDefinition = "NUMERIC(2,2)")
     private Double commissionPct;

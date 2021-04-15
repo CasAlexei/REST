@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class EmployeeDto {
@@ -12,7 +13,7 @@ public class EmployeeDto {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private LocalDate hireDate;
+    private LocalDateTime hireDate;
     private Double salary;
     private Double commissionPct;
 }

@@ -20,11 +20,22 @@ public class EmployeesService {
 
     public Employees getEmployee(Integer id){
         //Long l = employeeRepository.count();
-        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException());
+        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
 
     }
 
     public List<Employees> getAllEmployees(){
         return employeeRepository.findAll();
+    }
+
+    public Employees updateEmployees(Integer id, EmployeeDto employeeDto){
+        Employees employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found employee"));
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+        employee.setSalary(employeeDto.getSalary());
+        employee.setCommissionPct(employeeDto.getCommissionPct());
+return employeeRepository.save(employee);
     }
 }
