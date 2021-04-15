@@ -25,16 +25,13 @@ public class Employees {
     private String email;
     private String phoneNumber;
     private LocalDate hireDate;
-    private double salary;
-    private double commissionPct;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="department_id")
-    private Departments departmentDetail;
+    private Double salary;
+    //@Column(columnDefinition = "NUMERIC(2,2)")
+    private Double commissionPct;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "department_id", nullable = false)
-//    private Departments departments;
+//    @JoinColumn(name="department_id")
+//    private Departments departmentDetail;
 
 
     public static Employees from(EmployeeDto employeeDto) {

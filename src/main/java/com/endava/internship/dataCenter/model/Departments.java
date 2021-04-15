@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,16 +14,15 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="departments")
 public class Departments {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer departmentId;
     private String departmentName;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            mappedBy = "departmentDetail")
-    private List<Employees> employeesList;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employees")
+//    private List<Employees> employeesList;
 
     public static Departments from(DepartmentDto departmentDto) {
         return builder()

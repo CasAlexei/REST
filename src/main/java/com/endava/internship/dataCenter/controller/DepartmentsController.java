@@ -2,8 +2,6 @@ package com.endava.internship.dataCenter.controller;
 
 import com.endava.internship.dataCenter.model.DepartmentDto;
 import com.endava.internship.dataCenter.model.Departments;
-import com.endava.internship.dataCenter.model.EmployeeDto;
-import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.service.DepartmentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +20,15 @@ public class DepartmentsController {
         return departmentsService.addDepartment(departmentDto);
     }
 
-//    // get department by name
-//    @GetMapping("/employees/{id}")
-//    public Employees getEmployee(@PathVariable String id){
-//        return departmentsService.getDepartment(name);
-//    }
+    // get department by name
+    @GetMapping("/departments/{id}")
+    public Departments getDepartment(@PathVariable Integer id){
+        return departmentsService.getDepartment(id);
+    }
 
-//    //  list of all employees
-//    @GetMapping("/employees")
-//    public List<Employees> getAllEmployee(){
-//        return employeeService.getAllEmployees();
-//    }
+    //  list of all employees
+    @GetMapping("/departments")
+    public List<Departments> getAllDepartments(){
+        return departmentsService.getAllDepartments();
+    }
 }

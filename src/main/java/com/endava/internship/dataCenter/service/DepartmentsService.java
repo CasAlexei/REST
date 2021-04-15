@@ -21,8 +21,8 @@ public class DepartmentsService {
         return departmentRepository.save(Departments.from(departmentDto));
     }
 
-    public Departments getDepartment(String name){
-        return departmentRepository.findById(name).orElseThrow(() -> new RuntimeException());
+    public Departments getDepartment(Integer id){
+        return departmentRepository.findById(id).orElseThrow(() -> new RuntimeException());
 
     }
 
