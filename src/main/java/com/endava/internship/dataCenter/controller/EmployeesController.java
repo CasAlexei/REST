@@ -24,7 +24,8 @@ public class EmployeesController {
     // GET(id)  -  get employee by id
     @GetMapping("/employees/{id}")
     public Employees getEmployee(@PathVariable Integer id){
-        return employeesService.getEmployee(id);
+        //return employeesService.getEmployee(id);
+        return employeesService.getEmployeeJDBC(id);
     }
 
     // GET  -  list of all employees

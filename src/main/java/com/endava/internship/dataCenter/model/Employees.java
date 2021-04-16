@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -23,7 +24,7 @@ public class Employees {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private LocalDateTime hireDate;
+    private LocalDate hireDate;
     private Double salary;
     private Double commissionPct;
     //private Integer jobId;
