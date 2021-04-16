@@ -21,6 +21,9 @@ public class Jobs {
     private Double minSalary;
     private Double maxSalary;
 
-    @OneToOne(mappedBy = "jobs")
-    private Employees employees;
+//    @OneToOne(mappedBy = "jobs")
+//    private Employees employees;
+
+
+
 }

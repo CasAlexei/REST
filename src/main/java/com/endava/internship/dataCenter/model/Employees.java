@@ -26,15 +26,11 @@ public class Employees {
     private LocalDateTime hireDate;
     private Double salary;
     private Double commissionPct;
-    //private Integer jobId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @OneToOne
     @JoinColumn(name="job_id")
     private Jobs jobs;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="department_id")
-//    private Departments departmentDetail;
 
 
     public static Employees from(EmployeeDto employeeDto) {
