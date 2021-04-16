@@ -15,11 +15,19 @@ public class EmployeesService {
     private final EmployeeRepository employeeRepository;
 
     public Employees addEmployee(EmployeeDto employeeDto){
-        return employeeRepository.save(Employees.from(employeeDto));
+        Employees employee = new Employees();
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+        employee.setPhoneNumber(employeeDto.getPhoneNumber());
+        employee.setHireDate(employeeDto.getHireDate());
+        employee.setSalary(employeeDto.getSalary());
+        employee.setCommissionPct(employeeDto.getCommissionPct());
+        employee.setJobId(1);
+        return employeeRepository.save(employee);
     }
 
     public Employees getEmployee(Integer id){
-        //Long l = employeeRepository.count();
         return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
 
     }

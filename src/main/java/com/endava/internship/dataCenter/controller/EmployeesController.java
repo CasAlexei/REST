@@ -21,7 +21,7 @@ public class EmployeesController {
         return employeesService.addEmployee(employeesDto);
     }
 
-    // GET  -  get employee by id
+    // GET(id)  -  get employee by id
     @GetMapping("/employees/{id}")
     public Employees getEmployee(@PathVariable Integer id){
         return employeesService.getEmployee(id);

@@ -29,4 +29,12 @@ public class DepartmentsService {
     public List<Departments> getAllDepartments(){
         return departmentRepository.findAll();
     }
+
+    public Departments updateDepartment(Integer id, DepartmentDto departmentDto){
+        Departments department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("department not found"));
+        department.setDepartmentName(departmentDto.getDepartmentName());
+        return departmentRepository.save(department);
+    }
+
 }

@@ -1,13 +1,11 @@
 package com.endava.internship.dataCenter.model;
 
-import javafx.scene.input.DataFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -27,12 +25,13 @@ public class Employees {
     private String phoneNumber;
     private LocalDateTime hireDate;
     private Double salary;
-    //@Column(columnDefinition = "NUMERIC(2,2)")
     private Double commissionPct;
+    private Integer jobId;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name="department_id")
 //    private Departments departmentDetail;
+
 
 
     public static Employees from(EmployeeDto employeeDto) {
