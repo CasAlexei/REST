@@ -16,13 +16,11 @@ import javax.persistence.*;
 public class Jobs {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Integer jobId;
     private String jobTitle;
     private Double minSalary;
     private Double maxSalary;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="job_id")
-//    private Employees employees;
-
+    @OneToOne(mappedBy = "jobs")
+    private Employees employees;
 }

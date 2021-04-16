@@ -23,13 +23,12 @@ public class EmployeesService {
         employee.setHireDate(employeeDto.getHireDate());
         employee.setSalary(employeeDto.getSalary());
         employee.setCommissionPct(employeeDto.getCommissionPct());
-        employee.setJobId(1);
+        //employee.setJobId(1);
         return employeeRepository.save(employee);
     }
 
     public Employees getEmployee(Integer id){
         return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
-
     }
 
     public List<Employees> getAllEmployees(){
