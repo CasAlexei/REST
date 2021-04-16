@@ -7,11 +7,3 @@ CREATE TABLE jobs
 
     CONSTRAINT min_max_salary_ck CHECK ( min_salary < max_salary )
 );
---
---
---CREATE SEQUENCE jobs_seq NOCACHE;
---
---
---ALTER TABLE jobs
---    MODIFY job_id DEFAULT jobs_seq.nextval;  --whe use sequence to generate id. nextval give a next id by id++
---
