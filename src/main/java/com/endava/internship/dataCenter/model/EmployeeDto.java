@@ -3,7 +3,6 @@ package com.endava.internship.dataCenter.model;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 public class EmployeeDto {
@@ -14,4 +13,7 @@ public class EmployeeDto {
     private LocalDate hireDate;
     private Double salary;
     private Double commissionPct;
+    private String jobId;
+    //private Integer managerId;
+    //private Integer departmentId;
 }

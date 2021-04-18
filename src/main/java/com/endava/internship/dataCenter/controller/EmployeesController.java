@@ -18,7 +18,8 @@ public class EmployeesController {
     // POST  -  create new employee
     @PostMapping("/employees")
     public Employees addEmployee(@RequestBody EmployeeDto employeesDto){
-        return employeesService.addEmployee(employeesDto);
+        //return employeesService.addEmployee(employeesDto);
+        return employeesService.addEmployeeJDBC(employeesDto);
     }
 
     // GET(id)  -  get employee by id

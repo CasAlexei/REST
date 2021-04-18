@@ -16,11 +16,11 @@ import javax.persistence.*;
 public class Jobs {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer jobId;
+    private String jobId;
     private String jobTitle;
     private Double minSalary;
     private Double maxSalary;
 
-    @OneToOne(mappedBy = "jobs")
-    private Employees employees;
+//    @OneToOne(mappedBy = "jobFromEmployee")
+//    private Employees employees;
 }

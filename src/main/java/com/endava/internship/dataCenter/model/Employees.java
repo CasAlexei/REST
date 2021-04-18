@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -27,15 +26,18 @@ public class Employees {
     private LocalDate hireDate;
     private Double salary;
     private Double commissionPct;
-    //private Integer jobId;
+    private String jobId;
+//    private Integer managerId;
+//    private Integer departmentId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="job_id")
-    private Jobs jobs;
+//    @OneToOne(fetch = FetchType.LAZY)   //fetch = FetchType.LAZY
+//    @JoinColumn(name="job_id")
+//    private Jobs jobFromEmployee;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name="department_id")
 //    private Departments departmentDetail;
+
 
 
     public static Employees from(EmployeeDto employeeDto) {
@@ -47,6 +49,7 @@ public class Employees {
                 .hireDate(employeeDto.getHireDate())
                 .salary(employeeDto.getSalary())
                 .commissionPct(employeeDto.getCommissionPct())
+                .jobId(employeeDto.getJobId())
                 .build();
         }
 }
