@@ -49,29 +49,53 @@ public class EmployeesController {
         return new ResponseEntity<>(employeesList, HttpStatus.OK);
     }
 
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity handleException(Exception ex) {
+
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    ResponseEntity<String> firstAndLastNameNotNull() {
+        return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
+    }
+
 //        First name and Last name - not to be null, empty or blank
 //        Email - to match email format
 //        Phone number - to start with 0 and and contain exactly 9 digits
 //        Salary - min 1.0
     // POST  -  create new employee
     @PostMapping("/employees")
-    public ResponseEntity<Employees> addEmployee(@RequestBody EmployeeDto employeesDto){
+    public ResponseEntity<String> addEmployee(@RequestBody EmployeeDto employeesDto){
 
-
-        if(employeesDto.getFirstName()=="null" || employeesDto.getLastName()==null){
-            //return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>("Error in employee", HttpStatus.NOT_FOUND);
+        //  First name and Last name - not to be null, empty or blank
+        String checkFirstName = employeesDto.getFirstName();
+        String checkLastName = employeesDto.getLastName();
+        if(checkFirstName == null && checkLastName == null && checkFirstName.trim().isEmpty() && checkLastName.trim().isEmpty()){
+            return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
         }
 
+        // Email - to match email format
         boolean checkEmail = employeesDto.getEmail().matches("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "("
                 + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
+        if(!checkEmail){
+            return new ResponseEntity<>("Email is not correct", HttpStatus.BAD_REQUEST);
+        }
 
+        // Phone number - to start with 0 and and contain exactly 9 digits
         boolean checkPhoneNumber = employeesDto.getPhoneNumber().matches("^0\\d{9}");
-        System.out.println("email is = " + checkEmail + ", phone = " + checkPhoneNumber);
+        if(!checkPhoneNumber){
+            return new ResponseEntity<>("Phone number is not correct. Need to start with 0 and contain exactly 9 digits", HttpStatus.BAD_REQUEST);
+        }
+
+        // Salary - min 1.0
+        boolean checkSalary = employeesDto.getSalary() >= 1.0;
+        if(!checkSalary){
+            return new ResponseEntity<>("Check salary. Min value is 1.0", HttpStatus.BAD_REQUEST);
+        }
 
         Employees employees = this.employeesService.addEmployee(employeesDto);
 
-        return new ResponseEntity<>(employees, HttpStatus.CREATED);
+        return new ResponseEntity<>("Employee added", HttpStatus.CREATED);
     }
 
     // PUT - update an existing employee

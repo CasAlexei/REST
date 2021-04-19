@@ -7,24 +7,36 @@ import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.repository.DepartmentRepository;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DepartmentsService {
 
     private final DepartmentRepository departmentRepository;
 
+    public Departments getDepartmentById(Integer id){
+        log.info("IN DepartmentRepository getDepartmentById {}", id);
+        return departmentRepository.findById(id).orElseThrow(() -> new RuntimeException());
+    }
+
+
     public Departments addDepartment(DepartmentDto departmentDto){
+        Departments department = new Departments();
+
+        department.setDepartmentName(departmentDto.getDepartmentName());
+        department.setManagerId(departmentDto.getManagerId());
+        department.setLocationId(departmentDto.getLocationId());
+
+        log.info("IN DepartmentRepository addEmployee", department);
         return departmentRepository.save(Departments.from(departmentDto));
     }
 
-    public Departments getDepartment(Integer id){
-        return departmentRepository.findById(id).orElseThrow(() -> new RuntimeException());
 
-    }
 
     public List<Departments> getAllDepartments(){
         return departmentRepository.findAll();

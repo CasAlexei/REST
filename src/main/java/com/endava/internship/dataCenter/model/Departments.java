@@ -20,6 +20,8 @@ public class Departments {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer departmentId;
     private String departmentName;
+    private Integer managerId;
+    private Integer locationId;
 
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employees")
 //    private List<Employees> employeesList;
@@ -27,6 +29,8 @@ public class Departments {
     public static Departments from(DepartmentDto departmentDto) {
         return builder()
                 .departmentName(departmentDto.getDepartmentName())
+                .managerId(departmentDto.getManagerId())
+                .locationId(departmentDto.getLocationId())
                 .build();
     }
 
