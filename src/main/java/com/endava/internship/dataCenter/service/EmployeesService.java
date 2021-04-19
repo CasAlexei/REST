@@ -6,6 +6,7 @@ import com.endava.internship.dataCenter.model.Jobs;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
 import javafx.util.converter.LocalDateStringConverter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -14,11 +15,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Properties;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmployeesService {
 
     private final EmployeeRepository employeeRepository;
+
+    public Employees getEmployeeById(Integer id){
+        log.info("IN EmployeeRepository getEmployeeById {}", id);
+        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
+    }
+
 
     public Employees addEmployee(EmployeeDto employeeDto){
         Employees employee = new Employees();
@@ -29,20 +37,22 @@ public class EmployeesService {
         employee.setHireDate(employeeDto.getHireDate());
         employee.setSalary(employeeDto.getSalary());
         employee.setCommissionPct(employeeDto.getCommissionPct());
-        employee.setJobId("SA_REP");
+        employee.setJobId(employeeDto.getJobId());
+
+        log.info("IN EmployeeRepository addEmployee", employee);
+
         return employeeRepository.save(employee);
     }
 
 
-    public Employees getEmployee(Integer id){
-        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
-    }
-
     public List<Employees> getAllEmployees(){
+        log.info("IN EmployeeRepository getAllEmployees");
         return employeeRepository.findAll();
     }
 
     public Employees updateEmployees(Integer id, EmployeeDto employeeDto){
+        log.info("IN EmployeeRepository updateEmployees {}", id);
+
         Employees employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("not found employee"));
         employee.setFirstName(employeeDto.getFirstName());
@@ -50,7 +60,12 @@ public class EmployeesService {
         employee.setEmail(employeeDto.getEmail());
         employee.setSalary(employeeDto.getSalary());
         employee.setCommissionPct(employeeDto.getCommissionPct());
-return employeeRepository.save(employee);
+        return employeeRepository.save(employee);
+    }
+
+    public void deleteEmployee(Integer id){
+        log.info("IN EmployeeRepository deleteEmployee {}", id);
+        employeeRepository.deleteById(id);
     }
 
 // JDBC ------------------------------------------------------------------
@@ -114,7 +129,7 @@ return employeeRepository.save(employee);
 
             preparedStatement.executeUpdate();
 
-            System.out.println("new employee add");
+            System.out.println("add new employee add with JDBC");
 
 //            String qu = "insert into employees (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct)" +
 //                    "values (260, 'AAA11', 'BBB11', 'CCC12', '129268', TO_DATE('1991/06/07','yyyy/mm/dd'), 'SA_REP', 10000.0, 0.3)";
@@ -183,6 +198,8 @@ return employeeRepository.save(employee);
                 employee.setJobId(jobId);
 //                employee.setManagerId(managerId);
 //                employee.setDepartmentId(departmentId);
+
+                System.out.println("get employee id=" + employee_id + " with JDBC");
             }
         }catch (SQLException e){
             e.printStackTrace();
