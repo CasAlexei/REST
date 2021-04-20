@@ -2,7 +2,6 @@ package com.endava.internship.dataCenter.service;
 
 import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.model.EmployeeDto;
-import com.endava.internship.dataCenter.model.Jobs;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,12 +80,23 @@ public class EmployeesService {
     public Employees getEmployeeByIdHibernate(Integer id){
         log.info("IN EmployeeRepository getEmployeeById with Hibernate {}", id);
 
-        Session session = factory.getCurrentSession();
-        session.beginTransaction();
-        Employees employee = session.get(Employees.class, id);
-        session.beginTransaction().commit();
+        Employees employee = new Employees();
 
-        System.out.println("Employees = " + employee);
+        try {
+            Session session = factory.getCurrentSession();
+            session.beginTransaction();
+            employee = session.get(Employees.class, id);
+            session.beginTransaction().commit();
+
+            session.close();
+            factory.close();
+
+            System.out.println("Employees = " + employee);
+        }catch(Exception e){
+            new RuntimeException("not found employee");
+        }
+
+
         return employee;
     }
 
@@ -119,7 +129,7 @@ public class EmployeesService {
         try{
             stmt = c.createStatement();
 
-            ;
+
             String queryInsertNewEmployee = "insert into employees (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct) values (?, ?, ?, ?, ?, ?, ? ,? ,?)";
             PreparedStatement preparedStatement = c.prepareStatement(queryInsertNewEmployee);
 
@@ -155,26 +165,26 @@ public class EmployeesService {
 
             System.out.println("add new employee add with JDBC");
 
-//            String qu = "insert into employees (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct)" +
-//                    "values (260, 'AAA11', 'BBB11', 'CCC12', '129268', TO_DATE('1991/06/07','yyyy/mm/dd'), 'SA_REP', 10000.0, 0.3)";
-//            int countOfInsert = stmt.executeUpdate(queryInsertNewEmployee);
-
-//            System.out.println("number of insert = " +countOfInsert);
+/*
+            String qu = "insert into employees (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct)" +
+                    "values (260, 'AAA11', 'BBB11', 'CCC12', '129268', TO_DATE('1991/06/07','yyyy/mm/dd'), 'SA_REP', 10000.0, 0.3)";
+            int countOfInsert = stmt.executeUpdate(queryInsertNewEmployee);
+            System.out.println("number of insert = " +countOfInsert);
+*/
 
         }catch (SQLException e){
             e.printStackTrace();
         }
         finally {
-            try {if (resultSet != null) resultSet.close();} catch (Exception e) {e.printStackTrace();};
-            try {if (stmt != null) stmt.close();} catch (Exception e) {e.printStackTrace();};
-            try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();};
+            try {if (resultSet != null) resultSet.close();} catch (Exception e) {e.printStackTrace();}
+            try {if (stmt != null) stmt.close();} catch (Exception e) {e.printStackTrace();}
+            try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();}
         }
         return employee;
     }
 
     public Employees getEmployeeJDBC(Integer id){
         Employees employee = new Employees();
-        Jobs jobs = new Jobs();
 
         Connection c = connection();
         Statement stmt = null;
@@ -229,9 +239,9 @@ public class EmployeesService {
             e.printStackTrace();
         }
         finally {
-            try {if (rs != null) rs.close();} catch (Exception e) {e.printStackTrace();};
-            try {if (stmt != null) stmt.close();} catch (Exception e) {e.printStackTrace();};
-            try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();};
+            try {if (rs != null) rs.close();} catch (Exception e) {e.printStackTrace();}
+            try {if (stmt != null) stmt.close();} catch (Exception e) {e.printStackTrace();}
+            try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();}
         }
         return employee;
     }
