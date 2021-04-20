@@ -6,6 +6,9 @@ import com.endava.internship.dataCenter.model.Jobs;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -19,6 +22,11 @@ import java.util.Properties;
 public class EmployeesService {
 
     private final EmployeeRepository employeeRepository;
+
+    SessionFactory factory = new Configuration()
+            .configure("hibernate.cfg.xml")
+            .addAnnotatedClass(Employees.class)
+            .buildSessionFactory();
 
     public Employees getEmployeeById(Integer id){
         log.info("IN EmployeeRepository getEmployeeById {}", id);
@@ -66,6 +74,23 @@ public class EmployeesService {
         log.info("IN EmployeeRepository deleteEmployee {}", id);
         employeeRepository.deleteById(id);
     }
+
+// Use Hibernate -------------------------------------------------------------
+
+
+    public Employees getEmployeeByIdHibernate(Integer id){
+        log.info("IN EmployeeRepository getEmployeeById with Hibernate {}", id);
+
+        Session session = factory.getCurrentSession();
+        session.beginTransaction();
+        Employees employee = session.get(Employees.class, id);
+        session.beginTransaction().commit();
+
+        System.out.println("Employees = " + employee);
+        return employee;
+    }
+
+
 
 // JDBC ------------------------------------------------------------------
 
