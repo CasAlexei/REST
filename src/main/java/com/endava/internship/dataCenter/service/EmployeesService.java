@@ -4,14 +4,12 @@ import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.model.EmployeeDto;
 import com.endava.internship.dataCenter.model.Jobs;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
-import javafx.util.converter.LocalDateStringConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Properties;
 
@@ -30,6 +28,7 @@ public class EmployeesService {
 
     public Employees addEmployee(EmployeeDto employeeDto){
         Employees employee = new Employees();
+
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());
         employee.setEmail(employeeDto.getEmail());

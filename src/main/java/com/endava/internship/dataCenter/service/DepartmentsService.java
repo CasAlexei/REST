@@ -37,16 +37,23 @@ public class DepartmentsService {
     }
 
 
-
     public List<Departments> getAllDepartments(){
+        log.info("IN DepartmentRepository getAllDepartments");
         return departmentRepository.findAll();
     }
+
 
     public Departments updateDepartment(Integer id, DepartmentDto departmentDto){
         Departments department = departmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("department not found"));
         department.setDepartmentName(departmentDto.getDepartmentName());
         return departmentRepository.save(department);
+    }
+
+
+    public void deleteDepartment(Integer id){
+        log.info("IN DepartmentRepository deleteDepartment {}", id);
+        departmentRepository.deleteById(id);
     }
 
 }

@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.print.attribute.standard.PresentationDirection;
 import java.util.List;
 
 @RestController
@@ -47,12 +45,6 @@ public class EmployeesController {
         }
 
         return new ResponseEntity<>(employeesList, HttpStatus.OK);
-    }
-
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity handleException(Exception ex) {
-
-        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
     ResponseEntity<String> firstAndLastNameNotNull() {
