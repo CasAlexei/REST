@@ -5,9 +5,9 @@ import com.endava.internship.dataCenter.model.EmployeeDto;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -22,12 +22,14 @@ public class EmployeesService {
 
     private final EmployeeRepository employeeRepository;
 
-    SessionFactory factory = new Configuration()
-            .configure("hibernate.cfg.xml")
-            .addAnnotatedClass(Employees.class)
-            .buildSessionFactory();
+    @Autowired
+    private SessionFactory sessionFactory;
+
 
     public Employees getEmployeeById(Integer id){
+
+        String query = "SELECT * FROM employees";
+        sessionFactory.getCurrentSession().createQuery(query);
         log.info("IN EmployeeRepository getEmployeeById {}", id);
         return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
     }
@@ -77,28 +79,28 @@ public class EmployeesService {
 // Use Hibernate -------------------------------------------------------------
 
 
-    public Employees getEmployeeByIdHibernate(Integer id){
-        log.info("IN EmployeeRepository getEmployeeById with Hibernate {}", id);
-
-        Employees employee = new Employees();
-
-        try {
-            Session session = factory.getCurrentSession();
-            session.beginTransaction();
-            employee = session.get(Employees.class, id);
-            session.beginTransaction().commit();
-
-            session.close();
-            factory.close();
-
-            System.out.println("Employees = " + employee);
-        }catch(Exception e){
-            new RuntimeException("not found employee");
-        }
-
-
-        return employee;
-    }
+//    public Employees getEmployeeByIdHibernate(Integer id){
+//        log.info("IN EmployeeRepository getEmployeeById with Hibernate {}", id);
+//
+//        Employees employee = new Employees();
+//
+//        try {
+//            Session session = factory.getCurrentSession();
+//            session.beginTransaction();
+//            employee = session.get(Employees.class, id);
+//            session.beginTransaction().commit();
+//
+//            session.close();
+//            factory.close();
+//
+//            System.out.println("Employees = " + employee);
+//        }catch(Exception e){
+//            new RuntimeException("not found employee");
+//        }
+//
+//
+//        return employee;
+//    }
 
 
 
