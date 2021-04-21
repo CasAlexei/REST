@@ -9,14 +9,14 @@ import java.util.List;
 
 public interface EmployeeRepository{
 
-    Employees getEmployeeById(Long id);
+    Employees getEmployeeById(Integer id);
 
     Employees addEmployee(EmployeeDto employeeDto);
 
     List<Employees> getAllEmployees();
 
-    Employees updateEmployees(Long id, EmployeeDto employeeDto);
+    Employees updateEmployees(Integer id, EmployeeDto employeeDto);
 
-    void deleteEmployee(Long id);
+    void deleteEmployee(Integer id);
 
 }

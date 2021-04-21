@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -17,36 +19,46 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeesService implements EmployeeRepository{
 
-    //private final EmployeeRepository employeeRepository;
+    Employees employee = new Employees();
 
 //    @Autowired
-//    private SessionFactory sessionFactory;
+//    private SessionFactory factory;
 
     SessionFactory factory = new Configuration()
             .configure("hibernate.cfg.xml")
             .addAnnotatedClass(Employees.class)
             .buildSessionFactory();
 
-    public Employees getEmployeeById(Long id){
+    public Employees getEmployeeById(Integer id){
+        //Employees employee = new Employees();
 
-        Employees employee = new Employees();
+        //try{
+        Session session = factory.getCurrentSession();
+        session.beginTransaction();
+        employee = session.get(Employees.class, id);
+        session.getTransaction().commit();
 
-        String query = "SELECT * FROM employees where employee_id=150";
-        //sessionFactory.getCurrentSession().beginTransaction(). .createQuery(query);
+        System.out.println(employee);
+
+        log.info("Hibernate : IN EmployeeService getEmployeeById = {}", id);
+        return employee;
+    }
+
+    public List<Employees> getAllEmployees(){
+        List<Employees> employeesList = new ArrayList<>();
+        //Employees employee = new Employees();
 
         Session session = factory.getCurrentSession();
         session.beginTransaction();
-        employee = session.get(Employees.class, 150);
+        employeesList = session.createQuery("from Employees").getResultList();
         session.getTransaction().commit();
 
-        log.info("Hibernate : IN EmployeeRepository getEmployeeById {}", id);
-        return employee;
-        //return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
+        log.info("Hibernate : IN EmployeeService getAllEmployees");
+        return employeesList;
     }
 
 
     public Employees addEmployee(EmployeeDto employeeDto){
-        Employees employee = new Employees();
 
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());
@@ -57,21 +69,20 @@ public class EmployeesService implements EmployeeRepository{
         employee.setCommissionPct(employeeDto.getCommissionPct());
         employee.setJobId(employeeDto.getJobId());
 
-        log.info("Hibernate : IN EmployeeRepository addEmployee", employee);
+        Session session = factory.getCurrentSession();
+        session.beginTransaction();
+        session.save(employee);
+        session.getTransaction().commit();
+
+        log.info("Hibernate : IN EmployeeService addEmployee = ", employee);
 
         return employee;
     }
 
 
-    public List<Employees> getAllEmployees(){
-        log.info("IN EmployeeRepository getAllEmployees");
-        return null;
-        //return employeeRepository.findAll();
-    }
+    public Employees updateEmployees(Integer id, EmployeeDto employeeDto){
 
-    public Employees updateEmployees(Long id, EmployeeDto employeeDto){
-        log.info("Hibernate : IN EmployeeRepository updateEmployees {}", id);
-        Employees employee = new Employees();
+        //Employees employee = new Employees();
 
 //        Employees employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
         employee.setFirstName(employeeDto.getFirstName());
@@ -80,12 +91,14 @@ public class EmployeesService implements EmployeeRepository{
         employee.setSalary(employeeDto.getSalary());
         employee.setCommissionPct(employeeDto.getCommissionPct());
 
+        log.info("Hibernate : IN EmployeeService updateEmployees = {}", id);
+
         return employee;
         //return employeeRepository.save(employee);
     }
 
-    public void deleteEmployee(Long id){
-        log.info("Hibernate : IN EmployeeRepository deleteEmployee {}", id);
+    public void deleteEmployee(Integer id){
+        log.info("Hibernate : IN EmployeeService deleteEmployee = {}", id);
         //employeeRepository.deleteById(id);
     }
 

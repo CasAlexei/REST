@@ -9,12 +9,13 @@ import org.springframework.context.annotation.Bean;
 public class GetFactory {
 
     @Bean
-    void factory() {
+    public void getFactory() {
 
         SessionFactory factory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(Employees.class)
                 .buildSessionFactory();
+        //return factory;
     }
 }
 

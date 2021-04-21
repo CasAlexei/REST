@@ -17,10 +17,9 @@ public class EmployeesController {
     private final EmployeesService employeesService;
 
 
-
 //  GET(id)  -  get employee by id
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Employees> getEmployee(@PathVariable Long id){
+    public ResponseEntity<Employees> getEmployee(@PathVariable Integer id){
         if(id == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -32,7 +31,6 @@ public class EmployeesController {
         }
 
         return new ResponseEntity<>(employee, HttpStatus.OK);
-        //return employeesService.getEmployeeJDBC(id);
     }
 
     // GET  -  list of all employees
@@ -92,14 +90,14 @@ public class EmployeesController {
 
     // PUT - update an existing employee
     @PutMapping("/employees/{id}")
-    public Employees updateEmployeeById(@PathVariable Long id, @RequestBody EmployeeDto employeeDto){
+    public Employees updateEmployeeById(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto){
         return employeesService.updateEmployees(id, employeeDto);
     }
 
 
     // DELETE  -  delete employee by id
     @DeleteMapping("/employees/{id}")
-    public void deleteEmployee(@PathVariable Long id){
+    public void deleteEmployee(@PathVariable Integer id){
         employeesService.deleteEmployee(id);
     }
 
