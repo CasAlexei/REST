@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 public class GetFactory {
 
     @Bean
-    public void factory() {
+    void factory() {
 
         SessionFactory factory = new Configuration()
                 .configure("hibernate.cfg.xml")

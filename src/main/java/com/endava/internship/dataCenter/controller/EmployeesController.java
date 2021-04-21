@@ -20,7 +20,7 @@ public class EmployeesController {
 
 //  GET(id)  -  get employee by id
     @GetMapping("/employees/{id}")
-    public ResponseEntity<Employees> getEmployee(@PathVariable Integer id){
+    public ResponseEntity<Employees> getEmployee(@PathVariable Long id){
         if(id == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -92,14 +92,14 @@ public class EmployeesController {
 
     // PUT - update an existing employee
     @PutMapping("/employees/{id}")
-    public Employees updateEmployeeById(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto){
+    public Employees updateEmployeeById(@PathVariable Long id, @RequestBody EmployeeDto employeeDto){
         return employeesService.updateEmployees(id, employeeDto);
     }
 
 
     // DELETE  -  delete employee by id
     @DeleteMapping("/employees/{id}")
-    public void deleteEmployee(@PathVariable Integer id){
+    public void deleteEmployee(@PathVariable Long id){
         employeesService.deleteEmployee(id);
     }
 
