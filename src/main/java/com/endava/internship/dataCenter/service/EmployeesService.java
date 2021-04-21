@@ -54,6 +54,7 @@ public class EmployeesService implements EmployeeRepository{
         session.getTransaction().commit();
 
         log.info("Hibernate : IN EmployeeService getAllEmployees");
+
         return employeesList;
     }
 
@@ -74,7 +75,8 @@ public class EmployeesService implements EmployeeRepository{
         session.save(employee);
         session.getTransaction().commit();
 
-        log.info("Hibernate : IN EmployeeService addEmployee = ", employee);
+        log.info("Hibernate : IN EmployeeService addEmployee id = {}", employee.getEmployeeId());
+        //System.out.println("new employee add : " + employee);
 
         return employee;
     }
@@ -82,24 +84,42 @@ public class EmployeesService implements EmployeeRepository{
 
     public Employees updateEmployees(Integer id, EmployeeDto employeeDto){
 
-        //Employees employee = new Employees();
-
 //        Employees employee = employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
+
+
+        Session session = factory.getCurrentSession();
+        session.beginTransaction();
+        employee = session.get(Employees.class, id);
+
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());
         employee.setEmail(employeeDto.getEmail());
+        employee.setPhoneNumber(employeeDto.getPhoneNumber());
+        employee.setHireDate(employeeDto.getHireDate());
         employee.setSalary(employeeDto.getSalary());
         employee.setCommissionPct(employeeDto.getCommissionPct());
+        employee.setJobId(employeeDto.getJobId());
 
-        log.info("Hibernate : IN EmployeeService updateEmployees = {}", id);
+        session.getTransaction().commit();
+
+        log.info("Hibernate : IN EmployeeService updateEmployees with Id = {}", id);
 
         return employee;
-        //return employeeRepository.save(employee);
     }
 
     public void deleteEmployee(Integer id){
-        log.info("Hibernate : IN EmployeeService deleteEmployee = {}", id);
-        //employeeRepository.deleteById(id);
+
+        Session session = factory.getCurrentSession();
+        session.beginTransaction();
+        employee = session.get(Employees.class, id);
+        session.delete(employee);
+        //session.createQuery("delete Departments where ... ='...'").executeUpdate();
+        session.getTransaction().commit();
+
+
+
+
+        log.info("Hibernate : IN EmployeeService deleteEmployee with Id = {}", id);
     }
 
 }
