@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DepartmentsService implements DepartmentRepository{
 
-    private final DepartmentRepository departmentRepository;
+    private final Departments department = new Departments();
 
     @Override
     public Departments getDepartmentById(Integer id) {

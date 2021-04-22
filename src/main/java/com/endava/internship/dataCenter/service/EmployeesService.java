@@ -10,27 +10,28 @@ import org.springframework.stereotype.Service;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Properties;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmployeesService implements EmployeeRepository{
 
-    private final EmployeeRepository employeeRepository;
+    // JDBC driver name and database URL
+    static final String JDBC_DRIVER = "com.oracle.ojdbc";
+    static final String DB_URL = "jdbc:oracle:thin:@//localhost:1521/PDB";
+
+    //  Database credentials
+    static final String USER = "hr";
+    static final String PASS = "hr";
 
     private static Connection connection(){
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", "hr");
-        connectionProps.put("password", "hr");
-
         Connection conn = null;
         try{
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@//localhost:1521/PDB", connectionProps);
-        }catch (SQLException e){
+            conn  = DriverManager.getConnection(DB_URL, USER, PASS);
+        }
+        catch (SQLException e){
             e.printStackTrace();
         }
-
         return conn;
     }
 
@@ -84,8 +85,6 @@ public class EmployeesService implements EmployeeRepository{
                 employee.setJobId(jobId);
 //                employee.setManagerId(managerId);
 //                employee.setDepartmentId(departmentId);
-
-                System.out.println("get employee id=" + employee_id + " with JDBC");
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -95,6 +94,9 @@ public class EmployeesService implements EmployeeRepository{
             try {if (stmt != null) stmt.close();} catch (Exception e) {e.printStackTrace();}
             try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();}
         }
+
+        log.info("JDBC : IN EmployeeService getEmployeeById Id = {}", id);
+
         return employee;
     }
 
@@ -109,15 +111,14 @@ public class EmployeesService implements EmployeeRepository{
         try{
             stmt = c.createStatement();
 
-
             String queryInsertNewEmployee = "insert into employees (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct) values (?, ?, ?, ?, ?, ?, ? ,? ,?)";
             PreparedStatement preparedStatement = c.prepareStatement(queryInsertNewEmployee);
 
-            String getIdNext = "select count(employee_id)+1 as count from employees";
+            String getIdNext = "select max(employee_id) as count from employees";
             resultSet = stmt.executeQuery(getIdNext);
             resultSet.next();
 
-            int newId = resultSet.getInt("count")+100;  // make next id value for employee_id
+            int newId = resultSet.getInt("count");  // make next id value for employee_id
             newId++;
 
             preparedStatement.setInt(1, newId);                             // employee_id
@@ -142,9 +143,6 @@ public class EmployeesService implements EmployeeRepository{
             employee.setJobId(employeeDto.getJobId());
 
             preparedStatement.executeUpdate();
-
-            System.out.println("add new employee add with JDBC");
-
 /*
             String qu = "insert into employees (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct)" +
                     "values (260, 'AAA11', 'BBB11', 'CCC12', '129268', TO_DATE('1991/06/07','yyyy/mm/dd'), 'SA_REP', 10000.0, 0.3)";
@@ -160,22 +158,78 @@ public class EmployeesService implements EmployeeRepository{
             try {if (stmt != null) stmt.close();} catch (Exception e) {e.printStackTrace();}
             try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();}
         }
+
+        log.info("JDBC : IN EmployeeService addEmployee Id = {}", employee.getEmployeeId());
+
         return employee;
     }
 
     @Override
     public List<Employees> getAllEmployees() {
+
+        log.info("Hibernate : IN EmployeeService getAllEmployees");
         return null;
     }
 
     @Override
     public Employees updateEmployees(Integer id, EmployeeDto employeeDto) {
-        return null;
+        Employees employee = new Employees();
+        Connection c = connection();
+        Statement statement = null;
+        try{
+            statement = c.createStatement();
+
+            String queryToUpdate = "UPDATE employees SET first_name=?,last_name=?,email=?,phone_number=?,hire_date=?, job_id=?,salary=?, commission_pct=?  WHERE employee_id=?";
+            PreparedStatement preparedStatement = c.prepareStatement(queryToUpdate);
+
+            preparedStatement.setString(1, employeeDto.getFirstName());     // first_name
+            preparedStatement.setString(2, employeeDto.getLastName());      // last_name
+            preparedStatement.setString(3, employeeDto.getEmail());         // email
+            preparedStatement.setString(4, employeeDto.getPhoneNumber());   // phone_number
+            preparedStatement.setDate(5, java.sql.Date.valueOf(employeeDto.getHireDate().toString()));   // hire_date
+            preparedStatement.setString(6, employeeDto.getJobId());         // job_id
+            preparedStatement.setDouble(7, employeeDto.getSalary());        // salary
+            preparedStatement.setDouble(8, employeeDto.getCommissionPct()); // commission_pct
+            preparedStatement.setInt(9, id);                                // employee_id
+            preparedStatement.executeUpdate();
+
+            System.out.println("update employee with Id = " + id);
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            try {if (statement != null) statement.close();} catch (Exception e) {e.printStackTrace();}
+            try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();}
+        }
+
+        log.info("JDBC : IN EmployeeService updateEmployees with Id = {}", id);
+
+        return employee;
     }
 
     @Override
     public void deleteEmployee(Integer id) {
 
+        Connection c = connection();
+        Statement statement = null;
+
+        try{
+            statement = c.createStatement();
+
+            String deleteEmployeeById = "DELETE FROM employees WHERE employee_id =" + id;
+            statement.executeUpdate(deleteEmployeeById);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            try {if (statement != null) statement.close();} catch (Exception e) {e.printStackTrace();}
+            try {if (c != null) c.close();} catch (Exception e) {e.printStackTrace();}
+        }
+
+        log.info("JDBC : IN EmployeeService deleteEmployee with Id = {}", id);
     }
 
 
