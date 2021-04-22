@@ -3,6 +3,7 @@ package com.endava.internship.dataCenter.controller;
 import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.model.EmployeeDto;
 import com.endava.internship.dataCenter.service.EmployeesService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,7 @@ public class EmployeesController {
 
     private final EmployeesService employeesService;
 
-
-
-//  GET(id)  -  get employee by id
+    //  GET(id)  -  get employee by id
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employees> getEmployee(@PathVariable Integer id){
         if(id == null){
@@ -32,7 +31,6 @@ public class EmployeesController {
         }
 
         return new ResponseEntity<>(employee, HttpStatus.OK);
-        //return employeesService.getEmployeeJDBC(id);
     }
 
     // GET  -  list of all employees
@@ -47,14 +45,7 @@ public class EmployeesController {
         return new ResponseEntity<>(employeesList, HttpStatus.OK);
     }
 
-    ResponseEntity<String> firstAndLastNameNotNull() {
-        return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
-    }
 
-//        First name and Last name - not to be null, empty or blank
-//        Email - to match email format
-//        Phone number - to start with 0 and and contain exactly 9 digits
-//        Salary - min 1.0
     // POST  -  create new employee
     @PostMapping("/employees")
     public ResponseEntity<String> addEmployee(@RequestBody EmployeeDto employeesDto){
