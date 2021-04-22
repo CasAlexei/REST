@@ -15,10 +15,15 @@ import javax.persistence.*;
 @Table(name="jobs")
 public class Jobs {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    //@SequenceGenerator(name="employees_seq",sequenceName="employees_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employees_seq")
+    @Column(name = "job_id")
     private String jobId;
+    @Column(name = "job_title")
     private String jobTitle;
+    @Column(name = "min_salary")
     private Double minSalary;
+    @Column(name = "max_salary")
     private Double maxSalary;
 
 //    @OneToOne(mappedBy = "jobFromEmployee")

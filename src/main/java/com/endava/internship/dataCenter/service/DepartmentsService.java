@@ -15,9 +15,35 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DepartmentsService {
+public class DepartmentsService implements DepartmentRepository{
 
     private final DepartmentRepository departmentRepository;
+
+    @Override
+    public Departments getDepartmentById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public Departments addDepartment(DepartmentDto departmentDto) {
+        return null;
+    }
+
+    @Override
+    public List<Departments> getAllDepartments() {
+        return null;
+    }
+
+    @Override
+    public Departments updateDepartment(Integer id, DepartmentDto departmentDto) {
+        return null;
+    }
+
+    @Override
+    public void deleteDepartment(Integer id) {
+
+    }
+/*
 
     public Departments getDepartmentById(Integer id){
         log.info("IN DepartmentRepository getDepartmentById {}", id);
@@ -55,5 +81,6 @@ public class DepartmentsService {
         log.info("IN DepartmentRepository deleteDepartment {}", id);
         departmentRepository.deleteById(id);
     }
+*/
 
 }
