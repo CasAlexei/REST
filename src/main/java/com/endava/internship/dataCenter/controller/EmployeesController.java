@@ -55,8 +55,11 @@ public class EmployeesController {
         //  First name and Last name - not to be null, empty or blank
         String checkFirstName = employeesDto.getFirstName();
         String checkLastName = employeesDto.getLastName();
-        if(checkFirstName == null && checkLastName == null && checkFirstName.trim().isEmpty() && checkLastName.trim().isEmpty()){
-            return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
+        if(checkFirstName == null || checkLastName == null){
+            return new ResponseEntity<>("First name and Last name - not to be null", HttpStatus.BAD_REQUEST);
+        }
+        if(checkFirstName.trim().isEmpty() || checkLastName.trim().isEmpty()){
+            return new ResponseEntity<>("First name and Last name - not to be empty or blank", HttpStatus.BAD_REQUEST);
         }
 
         // Email - to match email format
@@ -89,8 +92,11 @@ public class EmployeesController {
         //  First name and Last name - not to be null, empty or blank
         String checkFirstName = employeeDto.getFirstName();
         String checkLastName = employeeDto.getLastName();
-        if(checkFirstName == null && checkLastName == null && checkFirstName.trim().isEmpty() && checkLastName.trim().isEmpty()){
-            return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
+        if(checkFirstName == null || checkLastName == null){
+            return new ResponseEntity<>("First name and Last name - not to be null", HttpStatus.BAD_REQUEST);
+        }
+        if(checkFirstName.trim().isEmpty() || checkLastName.trim().isEmpty()){
+            return new ResponseEntity<>("First name and Last name - not to be empty or blank", HttpStatus.BAD_REQUEST);
         }
 
         // Email - to match email format

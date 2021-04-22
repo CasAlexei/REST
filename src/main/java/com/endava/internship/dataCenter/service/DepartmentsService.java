@@ -2,7 +2,6 @@ package com.endava.internship.dataCenter.service;
 
 import com.endava.internship.dataCenter.model.DepartmentDto;
 import com.endava.internship.dataCenter.model.Departments;
-import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class DepartmentsService implements DepartmentRepository {
 
         Session session = factory.getCurrentSession();
         session.beginTransaction();
-        departmentsList = session.createQuery("from departments").getResultList();
+        departmentsList = session.createQuery("from Departments").getResultList();
         session.getTransaction().commit();
 
         log.info("IN DepartmentRepository getAllDepartments");
