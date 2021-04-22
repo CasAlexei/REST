@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,8 +29,6 @@ public class EmployeesService implements EmployeeRepository{
             .buildSessionFactory();
 
     public Employees getEmployeeById(Integer id){
-        //Employees employee = new Employees();
-
         //try{
         Session session = factory.getCurrentSession();
         session.beginTransaction();
@@ -108,16 +105,12 @@ public class EmployeesService implements EmployeeRepository{
     }
 
     public void deleteEmployee(Integer id){
-
         Session session = factory.getCurrentSession();
         session.beginTransaction();
         employee = session.get(Employees.class, id);
         session.delete(employee);
         //session.createQuery("delete Departments where ... ='...'").executeUpdate();
         session.getTransaction().commit();
-
-
-
 
         log.info("Hibernate : IN EmployeeService deleteEmployee with Id = {}", id);
     }

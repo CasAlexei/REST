@@ -16,7 +16,6 @@ public class EmployeesController {
 
     private final EmployeesService employeesService;
 
-
 //  GET(id)  -  get employee by id
     @GetMapping("/employees/{id}")
     public ResponseEntity<Employees> getEmployee(@PathVariable Integer id){
@@ -43,10 +42,6 @@ public class EmployeesController {
         }
 
         return new ResponseEntity<>(employeesList, HttpStatus.OK);
-    }
-
-    ResponseEntity<String> firstAndLastNameNotNull() {
-        return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
     }
 
 //        First name and Last name - not to be null, empty or blank
@@ -108,7 +103,8 @@ public class EmployeesController {
         // Phone number - to start with 0 and and contain exactly 9 digits
         boolean checkPhoneNumber = employeeDto.getPhoneNumber().matches("^0\\d{9}");
         if(!checkPhoneNumber){
-            return new ResponseEntity<>("Phone number is not correct. Need to start with 0 and contain exactly 9 digits", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Phone number is not correct. Need to start with 0 and contain exactly 9 digits",
+                    HttpStatus.BAD_REQUEST);
         }
 
         // Salary - min 1.0
@@ -116,6 +112,9 @@ public class EmployeesController {
         if(!checkSalary){
             return new ResponseEntity<>("Check salary. Min value is 1.0", HttpStatus.BAD_REQUEST);
         }
+
+        employeesService.updateEmployees(id, employeeDto);
+
         return new ResponseEntity<>("Employee updated", HttpStatus.OK);
     }
 
@@ -134,7 +133,7 @@ public class EmployeesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>("Employee deleted", HttpStatus.OK);
+        return new ResponseEntity<>("Employee deleted", HttpStatus.NO_CONTENT);
     }
 
 }

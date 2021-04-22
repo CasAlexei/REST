@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 @Builder
 @Entity
@@ -18,11 +15,16 @@ import java.util.List;
 @Table(name="departments")
 public class Departments {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name="departments_seq",sequenceName="departments_seq", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "departments_seq")
+    @Column(name = "department_id")
     private Integer departmentId;
+    @Column(name = "department_name")
     private String departmentName;
-    private Integer managerId;
-    private Integer locationId;
+//    @Column(name = "manager_id")
+//    private Integer managerId;
+//    @Column(name = "location_id")
+//    private Integer locationId;
 
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "employees")
 //    private List<Employees> employeesList;
@@ -30,8 +32,8 @@ public class Departments {
     public static Departments from(DepartmentDto departmentDto) {
         return builder()
                 .departmentName(departmentDto.getDepartmentName())
-                .managerId(departmentDto.getManagerId())
-                .locationId(departmentDto.getLocationId())
+                //.managerId(departmentDto.getManagerId())
+                //.locationId(departmentDto.getLocationId())
                 .build();
     }
 
