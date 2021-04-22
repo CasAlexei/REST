@@ -5,6 +5,7 @@ import com.endava.internship.dataCenter.model.EmployeeDto;
 import com.endava.internship.dataCenter.model.Employees;
 import com.endava.internship.dataCenter.repository.EmployeeRepository;
 import com.endava.internship.dataCenter.service.EmployeesService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Lombok;
 import org.assertj.core.api.AbstractStringAssert;
 import org.junit.Before;
@@ -112,22 +113,64 @@ public class EmployeesControllerTest {
 
     @Test
     public void addEmployeeTest() throws Exception{
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setFirstName("Alexei");
-        employeeDto.setLastName("Casian");
-        employeeDto.setEmail("email@mail.ru");
-        employeeDto.setPhoneNumber("0123456789");
-        employeeDto.setHireDate(LocalDate.of(2003, 05, 05));
-        employeeDto.setJobId("U_MAN");
-        employeeDto.setSalary(10000.0);
-        employeeDto.setCommissionPct(0.5);
 
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setFirstName("firstName");
+        employeeDto.setLastName("lastName");
+        employeeDto.setEmail("email@mail.ru");
+        employeeDto.setHireDate(LocalDate.of(2003,05,05));
+        employeeDto.setCommissionPct(0.5);
+        employeeDto.setSalary(1000.0);
+        employeeDto.setJobId("U_MAN");
+        employeeDto.setPhoneNumber("0123456789");
 
         when(employeesService.addEmployee(employeeDto)).thenReturn(employee1);
-        mockMvc.perform(MockMvcRequestBuilders.post("/employees")).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.post("/employees")
+                .content(asJsonString(employeeDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").exists());
+
+//        when(employeesService.addEmployee(employeeDto)).thenReturn(employee1);
+//        mockMvc.perform(MockMvcRequestBuilders.post("/employees")).andExpect(status().isOk());
 
     }
 
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Test
+    public void updateEmployeeByIdTest() throws Exception{
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setFirstName("firstName");
+        employeeDto.setLastName("lastName");
+        employeeDto.setEmail("email@mail.ru");
+        employeeDto.setHireDate(LocalDate.of(2003,05,05));
+        employeeDto.setCommissionPct(0.5);
+        employeeDto.setSalary(1000.0);
+        employeeDto.setJobId("U_MAN");
+        employeeDto.setPhoneNumber("0123456789");
 
+        mockMvc.perform( MockMvcRequestBuilders.put("/employees/{id}", 1)
+                .content(asJsonString(new EmployeeDto()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("firstName2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("lastName2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("email2@mail.com"));
+    }
+
+    @Test
+    public void deleteEmployeeTest() throws Exception
+    {
+        mockMvc.perform( MockMvcRequestBuilders.delete("/employees/{id}", 1) )
+                .andExpect(status().isAccepted());
+    }
 }

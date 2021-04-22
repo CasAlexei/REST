@@ -50,31 +50,31 @@ public class EmployeesController {
     @PostMapping("/employees")
     public ResponseEntity<String> addEmployee(@RequestBody EmployeeDto employeesDto){
 
-        //  First name and Last name - not to be null, empty or blank
-        String checkFirstName = employeesDto.getFirstName();
-        String checkLastName = employeesDto.getLastName();
-        if(checkFirstName == null && checkLastName == null && checkFirstName.trim().isEmpty() && checkLastName.trim().isEmpty()){
-            return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
-        }
-
-        // Email - to match email format
-        boolean checkEmail = employeesDto.getEmail().matches("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "("
-                + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
-        if(!checkEmail){
-            return new ResponseEntity<>("Email is not correct", HttpStatus.BAD_REQUEST);
-        }
-
-        // Phone number - to start with 0 and and contain exactly 9 digits
-        boolean checkPhoneNumber = employeesDto.getPhoneNumber().matches("^0\\d{9}");
-        if(!checkPhoneNumber){
-            return new ResponseEntity<>("Phone number is not correct. Need to start with 0 and contain exactly 9 digits", HttpStatus.BAD_REQUEST);
-        }
-
-        // Salary - min 1.0
-        boolean checkSalary = employeesDto.getSalary() >= 1.0;
-        if(!checkSalary){
-            return new ResponseEntity<>("Check salary. Min value is 1.0", HttpStatus.BAD_REQUEST);
-        }
+//        //  First name and Last name - not to be null, empty or blank
+//        String checkFirstName = employeesDto.getFirstName();
+//        String checkLastName = employeesDto.getLastName();
+//        if(checkFirstName == null && checkLastName == null && checkFirstName.trim().isEmpty() && checkLastName.trim().isEmpty()){
+//            return new ResponseEntity<>("First name and Last name - not to be null, empty or blank", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        // Email - to match email format
+//        boolean checkEmail = employeesDto.getEmail().matches("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "("
+//                + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
+//        if(!checkEmail){
+//            return new ResponseEntity<>("Email is not correct", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        // Phone number - to start with 0 and and contain exactly 9 digits
+//        boolean checkPhoneNumber = employeesDto.getPhoneNumber().matches("^0\\d{9}");
+//        if(!checkPhoneNumber){
+//            return new ResponseEntity<>("Phone number is not correct. Need to start with 0 and contain exactly 9 digits", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        // Salary - min 1.0
+//        boolean checkSalary = employeesDto.getSalary() >= 1.0;
+//        if(!checkSalary){
+//            return new ResponseEntity<>("Check salary. Min value is 1.0", HttpStatus.BAD_REQUEST);
+//        }
 
         Employees employees = this.employeesService.addEmployee(employeesDto);
 
@@ -83,15 +83,20 @@ public class EmployeesController {
 
     // PUT - update an existing employee
     @PutMapping("/employees/{id}")
-    public Employees updateEmployeeById(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto){
-        return employeesService.updateEmployees(id, employeeDto);
+    public ResponseEntity<Employees> updateEmployeeById(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto){
+        Employees employees = this.employeesService.updateEmployees(id, employeeDto);
+
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
 
     // DELETE  -  delete employee by id
     @DeleteMapping("/employees/{id}")
-    public void deleteEmployee(@PathVariable Integer id){
+    public ResponseEntity<String> deleteEmployee(@PathVariable Integer id){
         employeesService.deleteEmployee(id);
+
+        return new ResponseEntity<>("employee deleted", HttpStatus.ACCEPTED);
+
     }
 
 }
