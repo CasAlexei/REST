@@ -65,42 +65,33 @@ public class EmployeesControllerTest {
 
 
     @Test
-    public void getEmployeeByIdTest() throws Exception {
-
+    public void getEmployeeById_isOkTest() throws Exception {
         when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/1")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getEmployeeById_notFoundTest() throws Exception {
+        when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/2")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getEmployeeById_isBadRequestTest() throws Exception {
+        when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/null")).andExpect(status().isBadRequest());
+    }
 
+    @Test
+    public void getEmployeeByIdSaveTest() throws Exception {
 
-//        ArgumentCaptor<Employees> captor = ArgumentCaptor.forClass(Employees.class);
-//        verify(employeesService).getEmployeeById(1);
-//        assertThat(captor.getValue().getFirstName()).isEqualTo("Alexei");
-//        assertThat(captor.getValue().getLastName()).isEqualTo("Casian");
-//        assertThat(captor.getValue().getEmail()).isEqualTo("email@mail.ru");
-//        assertThat(captor.getValue().getPhoneNumber()).isEqualTo("0123456789");
-//        assertThat(captor.getValue().getJobId()).isEqualTo("U_MAN");
-//        assertThat(captor.getValue().getSalary()).isEqualTo(10000.0);
-//        assertThat(captor.getValue().getCommissionPct()).isEqualTo(0.5);
-
+        when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees").exists());
-//                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[*].employeeId").isNotEmpty());
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/employees").content("{\n" +
-                "    \"firstName\": \"Peter\",\n" +
-                "    \"lastName\": \"Tucker\",\n" +
-                "    \"email\": \"320PTUCKER@mail.ru\",\n" +
-                "    \"phoneNumber\": \"0123456789\",\n" +
-                "    \"hireDate\": \"2005-01-30\",\n" +
-                "    \"salary\": 2000.0,\n" +
-                "    \"commissionPct\": 0.33,\n" +
-                "    \"jobId\": \"PU_MAN\"\n" +
-                "}"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").value(employee1.getEmployeeId()));
     }
+
 
     @Test
     public void getEmployeesTest() throws Exception {
@@ -124,7 +115,7 @@ public class EmployeesControllerTest {
         employeeDto.setJobId("U_MAN");
         employeeDto.setPhoneNumber("0123456789");
 
-        when(employeesService.addEmployee(employeeDto)).thenReturn(employee1);
+        when(employeesService.addEmployee(employeeDto)).thenReturn(Employees.from(employeeDto));
         mockMvc.perform(MockMvcRequestBuilders.post("/employees")
                 .content(asJsonString(employeeDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,7 +128,7 @@ public class EmployeesControllerTest {
 
     }
 
-    public static String asJsonString(final Object obj) {
+    private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {
@@ -157,20 +148,20 @@ public class EmployeesControllerTest {
         employeeDto.setJobId("U_MAN");
         employeeDto.setPhoneNumber("0123456789");
 
-        mockMvc.perform( MockMvcRequestBuilders.put("/employees/{id}", 1)
-                .content(asJsonString(new EmployeeDto()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("firstName2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("lastName2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("email2@mail.com"));
+        verify(employeesService).updateEmployees(1, employeeDto);
+        mockMvc.perform( MockMvcRequestBuilders.put("/employees/1")
+                .content(asJsonString(employeeDto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
     }
 
-    @Test
-    public void deleteEmployeeTest() throws Exception
-    {
-        mockMvc.perform( MockMvcRequestBuilders.delete("/employees/{id}", 1) )
-                .andExpect(status().isAccepted());
-    }
+//    @Test
+//    public void deleteEmployeeTest() throws Exception
+//    {
+//        when(employeesService.deleteEmployee(1)).thenReturn());
+//        mockMvc.perform( MockMvcRequestBuilders.delete("/employees/{id}", 1) )
+//                .andExpect(status().isAccepted());
+//    }
 }
