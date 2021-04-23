@@ -34,7 +34,7 @@ public class EmployeesService {
         employee.setCommissionPct(employeeDto.getCommissionPct());
         employee.setJobId(employeeDto.getJobId());
 
-        log.info("IN EmployeeRepository addEmployee", employee);
+        log.info("IN EmployeeRepository addEmployee with id = {}", employee.getEmployeeId());
 
         return employeeRepository.save(employee);
     }
@@ -59,7 +59,7 @@ public class EmployeesService {
     }
 
     public void deleteEmployee(Integer id){
-        log.info("IN EmployeeRepository deleteEmployee {}", id);
+        log.info("IN EmployeeRepository deleteEmployee with Id = {}", id);
         employeeRepository.deleteById(id);
     }
 
