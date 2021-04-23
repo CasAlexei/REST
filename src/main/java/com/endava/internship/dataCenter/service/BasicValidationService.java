@@ -18,7 +18,10 @@ public class BasicValidationService implements ValidationService{
 
     @Override
     public ResponseEntity<String> validateUserId(Integer userId) {
-        return null;
+        if(userId == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     @Override
@@ -34,5 +37,13 @@ public class BasicValidationService implements ValidationService{
             return new ResponseEntity<>("First name and Last name - not to be empty or blank", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("First name is ok", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> validateUserIsNotNull(Employees employees) {
+        if(employees == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

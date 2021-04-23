@@ -14,4 +14,6 @@ public interface ValidationService {
     ResponseEntity<String> validateUserId(Integer userId);
 
     ResponseEntity<String> validateUser(EmployeeDto user);
+
+    ResponseEntity<String> validateUserIsNotNull(Employees employees);
 }

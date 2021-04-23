@@ -45,8 +45,9 @@ public class EmployeesControllerTest {
     @Mock
     private EmployeeRepository employeeRepository;
 
-
     Employees employee1;
+    EmployeeDto employeeDto1;
+
     @Before
     public void setup(){
         mockMvc = MockMvcBuilders.standaloneSetup(employeesControllerTest).build();
@@ -61,73 +62,61 @@ public class EmployeesControllerTest {
         employee1.setJobId("U_MAN");
         employee1.setSalary(10000.0);
         employee1.setCommissionPct(0.5);
+
+        employeeDto1 = new EmployeeDto();
+        employeeDto1.setFirstName("firstnameDTO");
+        employeeDto1.setLastName("lastNameDTO");
+        employeeDto1.setEmail("dto@mail.ru");
+        employeeDto1.setHireDate(LocalDate.of(2003,05,05));
+        employeeDto1.setCommissionPct(0.8);
+        employeeDto1.setSalary(1111.0);
+        employeeDto1.setJobId("U_MAN");
+        employeeDto1.setPhoneNumber("0123456789");
     }
 
-
     @Test
-    public void getEmployeeById_isOkTest() throws Exception {
+    public void testGET_getEmployeeById_isOkIfEmployeesIsPresent() throws Exception {
         when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/1")).andExpect(status().isOk());
     }
-
     @Test
-    public void getEmployeeById_notFoundTest() throws Exception {
+    public void testGET_getEmployeeById_notFoundIfNotEmployeesWithId() throws Exception {
         when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/2")).andExpect(status().isNotFound());
     }
-
     @Test
-    public void getEmployeeById_isBadRequestTest() throws Exception {
+    public void testGET_getEmployeeById_isBadRequestIfEmployeesIsNull() throws Exception {
         when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/null")).andExpect(status().isBadRequest());
     }
-
     @Test
-    public void getEmployeeByIdSaveTest() throws Exception {
-
+    public void testGET_getEmployeeById_IsOKIfAllIsOkThenSaveEmployees() throws Exception {
         when(employeesService.getEmployeeById(1)).thenReturn(employee1);
         mockMvc.perform(MockMvcRequestBuilders.get("/employees/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").value(employee1.getEmployeeId()));
     }
-
-
     @Test
-    public void getEmployeesTest() throws Exception {
+    public void testGET_getEmployees_IsOKIfListOfEmployeesIsPresent() throws Exception {
         when(employeesService.getAllEmployees()).thenReturn(Arrays.asList(employee1));
         mockMvc.perform(MockMvcRequestBuilders.get("/employees")).andExpect(status().isOk());
-
+    }
+    @Test
+    public void testGET_getEmployees_IsNotFountIfListOfEmployeesIsEmpty() throws Exception {
         when(employeesService.getAllEmployees()).thenReturn(Arrays.asList());
         mockMvc.perform(MockMvcRequestBuilders.get("/employees")).andExpect(status().isNotFound());
     }
-
     @Test
-    public void addEmployeeTest() throws Exception{
-
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setFirstName("firstName");
-        employeeDto.setLastName("lastName");
-        employeeDto.setEmail("email@mail.ru");
-        employeeDto.setHireDate(LocalDate.of(2003,05,05));
-        employeeDto.setCommissionPct(0.5);
-        employeeDto.setSalary(1000.0);
-        employeeDto.setJobId("U_MAN");
-        employeeDto.setPhoneNumber("0123456789");
-
-        when(employeesService.addEmployee(employeeDto)).thenReturn(Employees.from(employeeDto));
+    public void testPOST_addEmployee() throws Exception{
+        when(employeesService.addEmployee(employeeDto1)).thenReturn(Employees.from(employeeDto1));
         mockMvc.perform(MockMvcRequestBuilders.post("/employees")
-                .content(asJsonString(employeeDto))
+                .content(asJsonString(employeeDto1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 //                .andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").exists());
-
-//        when(employeesService.addEmployee(employeeDto)).thenReturn(employee1);
-//        mockMvc.perform(MockMvcRequestBuilders.post("/employees")).andExpect(status().isOk());
-
     }
-
     private static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
@@ -135,33 +124,37 @@ public class EmployeesControllerTest {
             throw new RuntimeException(e);
         }
     }
+//    @Test
+//    public void testPUT_updateEmployeeById_IsOKIfEmployeesUpdated() throws Exception{
+//        //verify(employeesService).updateEmployees(1, employeeDto1);
+//        when(employeesService.updateEmployees(1,employeeDto1)).thenReturn(Employees.from(employeeDto1));
+//        mockMvc.perform(MockMvcRequestBuilders.put("/employees/1")
+//                .content(asJsonString(employeeDto1))
+//                .contentType(MediaType.APPLICATION_JSON))
+////                .andExpect(status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(employeeDto1.getFirstName()));
+//    }
 
     @Test
-    public void updateEmployeeByIdTest() throws Exception{
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setFirstName("firstName");
-        employeeDto.setLastName("lastName");
-        employeeDto.setEmail("email@mail.ru");
-        employeeDto.setHireDate(LocalDate.of(2003,05,05));
-        employeeDto.setCommissionPct(0.5);
-        employeeDto.setSalary(1000.0);
-        employeeDto.setJobId("U_MAN");
-        employeeDto.setPhoneNumber("0123456789");
-
-        verify(employeesService).updateEmployees(1, employeeDto);
-        mockMvc.perform( MockMvcRequestBuilders.put("/employees/1")
-                .content(asJsonString(employeeDto))
-                .contentType(MediaType.APPLICATION_JSON))
+    public void testDELETE_deleteEmployeeTest_IsOkIfIDIsNotNull() throws Exception
+    {
+        //when(employeesService.deleteEmployee(1)).thenReturn(null);
+        mockMvc.perform( MockMvcRequestBuilders.delete("/employees/{id}", 1) )
                 .andExpect(status().isOk());
-
-
+    }
+    @Test
+    public void testDELETE_deleteEmployeeTest_IsBadRequestIfIDIsNull() throws Exception
+    {
+        //when(employeesService.deleteEmployee(1)).thenReturn(null);
+        mockMvc.perform( MockMvcRequestBuilders.delete("/employees/{id}", 1))
+                .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    public void deleteEmployeeTest() throws Exception
-//    {
-//        when(employeesService.deleteEmployee(1)).thenReturn());
-//        mockMvc.perform( MockMvcRequestBuilders.delete("/employees/{id}", 1) )
-//                .andExpect(status().isAccepted());
-//    }
+    @Test
+    public void testDELETE_deleteEmployeeTest_IsOkIfEmployeesDeleted() throws Exception
+    {
+        //when(employeesService.deleteEmployee(1)).thenReturn();
+        mockMvc.perform( MockMvcRequestBuilders.delete("/employees/{id}", 1) )
+                .andExpect(status().isAccepted());
+    }
 }

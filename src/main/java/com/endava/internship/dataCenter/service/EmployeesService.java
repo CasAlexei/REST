@@ -17,8 +17,8 @@ public class EmployeesService {
     private final EmployeeRepository employeeRepository;
 
     public Employees getEmployeeById(Integer id){
-        log.info("IN EmployeeRepository getEmployeeById {}", id);
-        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("not found employee"));
+        log.info("IN EmployeesService getEmployeeById {}", id);
+        return employeeRepository.findById(id).orElse(null);
     }
 
 
@@ -34,19 +34,19 @@ public class EmployeesService {
         employee.setCommissionPct(employeeDto.getCommissionPct());
         employee.setJobId(employeeDto.getJobId());
 
-        log.info("IN EmployeeRepository addEmployee with id = {}", employee.getEmployeeId());
+        log.info("IN EmployeesService addEmployee");
 
         return employeeRepository.save(employee);
     }
 
 
     public List<Employees> getAllEmployees(){
-        log.info("IN EmployeeRepository getAllEmployees");
+        log.info("IN EmployeesService getAllEmployees");
         return employeeRepository.findAll();
     }
 
     public Employees updateEmployees(Integer id, EmployeeDto employeeDto){
-        log.info("IN EmployeeRepository updateEmployees {}", id);
+        log.info("IN EmployeesService updateEmployees {}", id);
 
         Employees employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("not found employee"));
@@ -59,7 +59,7 @@ public class EmployeesService {
     }
 
     public void deleteEmployee(Integer id){
-        log.info("IN EmployeeRepository deleteEmployee with Id = {}", id);
+        log.info("IN EmployeesService deleteEmployee with Id = {}", id);
         employeeRepository.deleteById(id);
     }
 

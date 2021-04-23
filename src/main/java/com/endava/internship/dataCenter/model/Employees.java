@@ -34,9 +34,9 @@ public class Employees {
 //    @JoinColumn(name="job_id")
 //    private Jobs jobFromEmployee;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="department_id")
-//    private Departments departmentDetail;
+//    @ManyToOne
+//    @JoinColumn(name="employee_id")
+//    private JobHistory jobHistory;
 
 
 
