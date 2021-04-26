@@ -145,7 +145,7 @@ public class EmployeesController {
         if(jobHistory != null){
             Integer num = jobHistory.getEmployee_id();
             LocalDate data = jobHistory.getStart_date();
-            jobHistoryService.deleteJobHistory(num);
+            //jobHistoryService.deleteJobHistory(num);
         }
 
         this.employeesService.deleteEmployee(id);
